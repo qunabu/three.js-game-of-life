@@ -3,15 +3,16 @@ var sphere;
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
 var SQUARE = 10;
+var SQAURE_PLUS = 10;
 
-var state = gof(randomArray());
+var state = gof8(randomArray8());
 
 init();
 animate();
 
 function init() {
     camera = new THREE.PerspectiveCamera(40, WIDTH / HEIGHT, 1, 10000);
-    camera.position.z = 3000;
+    camera.position.z = 1000;
     scene = new THREE.Scene();
     var amount = ROWS * COLS;
     SQUARE = WIDTH / ROWS;
@@ -36,7 +37,7 @@ function init() {
                 //color.setHSL(0.0 + 0.1 * (i / amount), 0.9, 0.5);
             }
             color.toArray(colors, i * 3);
-            sizes[i] = SQUARE + 100;
+            sizes[i] = SQUARE + SQAURE_PLUS;
             //visible[i] = 0;
             i++;
         }
@@ -110,7 +111,7 @@ function onWindowResize() {
 function animate() {
     requestAnimationFrame(animate);
     render();
-    state = gof(state);
+    state = gof8(state);
     //stats.update();
 }
 
@@ -120,12 +121,17 @@ function render() {
     var geometry = sphere.geometry;
     var attributes = geometry.attributes;
     var i = 0;
+    state.forEach((value,i) => {
+        attributes.size.array[i] = value == 1 ? SQUARE + SQAURE_PLUS: 0 ;
+    });
+    /*
     state.forEach((col,x) => {
         col.forEach((row,y) => {
             attributes.size.array[i] = row == 1 ? SQUARE + 100: 0 ;
             i++;
         });
     });
+    */
     //for (var i = 0; i < attributes.size.array.length; i++) {
         //attributes.size.array[i] = 14 + 13 * Math.sin(0.1 * i + time);
         //attributes.size.array[i] = Math.random() > 0.9 ? SQUARE: 0 ;
